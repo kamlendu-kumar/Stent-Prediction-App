@@ -4,10 +4,10 @@ import pickle
 # 1. Page Config
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. Dual-Tone & Pattern CSS (The 'Awwwards' Level Design)
+# 2. Dual-Tone & Pattern CSS (Fixed Centered Header)
 st.markdown("""
 <style>
-    /* Dark Patterned Background (Tech/Matrix Vibe) */
+    /* Dark Patterned Background */
     .stApp {
         background-color: #0f172a;
         background-image: radial-gradient(#334155 1.5px, transparent 1.5px);
@@ -32,13 +32,14 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Header Styling inside the Card */
+    /* PERFECTLY CENTERED HEADERS */
     .main-header {
         color: #0f172a;
         font-weight: 900;
         font-size: 2.8rem;
         letter-spacing: -1px;
         margin-bottom: 0.2rem;
+        text-align: center; /* FIXED */
     }
     .sub-header {
         color: #64748b;
@@ -47,9 +48,10 @@ st.markdown("""
         margin-bottom: 2.5rem;
         border-bottom: 2px solid #f1f5f9;
         padding-bottom: 1.5rem;
+        text-align: center; /* FIXED */
     }
 
-    /* Input Fields - Soft & Accessible */
+    /* Input Fields */
     .stNumberInput > div > div > input, 
     .stSelectbox > div > div > select {
         background-color: #f8fafc !important;
@@ -76,7 +78,7 @@ st.markdown("""
         margin-bottom: 6px !important;
     }
 
-    /* Vibrant Gradient Action Button */
+    /* Action Button */
     div.stButton > button {
         background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
         color: white;
@@ -106,6 +108,7 @@ st.markdown("""
         font-size: 1.1rem;
         font-weight: 600;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        text-align: center;
     }
     .danger-card {
         background: linear-gradient(to right, #fef2f2, #fee2e2);
@@ -116,6 +119,7 @@ st.markdown("""
         font-size: 1.1rem;
         font-weight: 600;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        text-align: center;
     }
 </style>
 """, unsafe_allow_html=True)
