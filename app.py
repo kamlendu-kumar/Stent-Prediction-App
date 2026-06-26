@@ -1,130 +1,140 @@
 import streamlit as st
 import pickle
 
-# 1. Page Config - Centered for that clean web-app feel
-st.set_page_config(page_title="StentGuard AI", layout="centered", initial_sidebar_state="collapsed")
+# 1. Page Config
+st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. Ultra-Minimalist CSS (Stripe / Vercel Aesthetic)
+# 2. Dual-Tone & Pattern CSS (The 'Awwwards' Level Design)
 st.markdown("""
 <style>
-    /* Pure Minimalist Canvas */
+    /* Dark Patterned Background (Tech/Matrix Vibe) */
     .stApp {
-        background-color: #FAFAFA;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        color: #111827;
+        background-color: #0f172a;
+        background-image: radial-gradient(#334155 1.5px, transparent 1.5px);
+        background-size: 30px 30px;
+        font-family: 'Inter', -apple-system, sans-serif;
     }
     
-    /* Hide Streamlit Clutter Completely */
+    /* Hide Default Clutter */
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* Clean Typography Header */
-    .premium-header {
-        padding: 3rem 0 2rem 0;
-        border-bottom: 1px solid #E5E7EB;
-        margin-bottom: 3rem;
-    }
-    .premium-header h1 {
-        font-size: 2.75rem;
-        font-weight: 800;
-        letter-spacing: -0.05em;
-        color: #111827;
-        margin: 0;
-        line-height: 1.2;
-    }
-    .premium-header p {
-        color: #6B7280;
-        font-size: 1.1rem;
-        margin-top: 0.5rem;
-        font-weight: 400;
+    /* The Floating Premium White Card */
+    .block-container {
+        background-color: #ffffff;
+        border-radius: 24px;
+        padding: 3rem 4rem !important;
+        margin-top: 4rem !important;
+        margin-bottom: 4rem !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        max-width: 950px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Flat, Sleek Inputs */
+    /* Header Styling inside the Card */
+    .main-header {
+        color: #0f172a;
+        font-weight: 900;
+        font-size: 2.8rem;
+        letter-spacing: -1px;
+        margin-bottom: 0.2rem;
+    }
+    .sub-header {
+        color: #64748b;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 2.5rem;
+        border-bottom: 2px solid #f1f5f9;
+        padding-bottom: 1.5rem;
+    }
+
+    /* Input Fields - Soft & Accessible */
     .stNumberInput > div > div > input, 
     .stSelectbox > div > div > select {
-        background-color: #FFFFFF !important;
-        border: 1px solid #D1D5DB !important;
-        border-radius: 6px !important;
-        color: #111827 !important;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-        transition: all 0.2s ease-in-out;
+        background-color: #f8fafc !important;
+        border: 1.5px solid #e2e8f0 !important;
+        border-radius: 10px !important;
+        color: #0f172a !important;
+        font-weight: 500;
+        padding: 0.5rem;
+        transition: all 0.3s ease;
     }
-    /* Sharp Focus State */
     .stNumberInput > div > div > input:focus, 
     .stSelectbox > div > div > select:focus {
-        border-color: #111827 !important;
-        box-shadow: 0 0 0 1px #111827 !important;
+        border-color: #4f46e5 !important;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
     }
     
     /* Micro-Typography for Labels */
     label {
         font-size: 0.75rem !important;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-weight: 600 !important;
-        color: #4B5563 !important;
-        margin-bottom: 0.25rem !important;
+        letter-spacing: 0.8px;
+        font-weight: 700 !important;
+        color: #475569 !important;
+        margin-bottom: 6px !important;
     }
 
-    /* The 'Execute' Button - Pitch Black & Solid */
+    /* Vibrant Gradient Action Button */
     div.stButton > button {
-        background-color: #111827;
-        color: #FFFFFF;
+        background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
+        color: white;
         border: none;
-        border-radius: 6px;
-        padding: 0.75rem 2rem;
-        font-size: 0.95rem;
-        font-weight: 600;
+        border-radius: 12px;
+        padding: 0.8rem 0;
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
         width: 100%;
-        margin-top: 2rem;
-        transition: background-color 0.2s ease;
-        letter-spacing: 0.02em;
+        margin-top: 1.5rem;
+        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        transition: all 0.3s ease;
     }
     div.stButton > button:hover {
-        background-color: #374151;
-        color: #FFFFFF;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.4);
     }
     
-    /* Minimalist Alert Cards */
-    .alert-safe {
-        background-color: #F0FDF4;
-        border: 1px solid #BBF7D0;
+    /* Custom Results Cards */
+    .safe-card {
+        background: linear-gradient(to right, #f0fdf4, #dcfce7);
+        border-left: 5px solid #22c55e;
+        padding: 1.5rem;
+        border-radius: 12px;
         color: #166534;
-        padding: 1.25rem;
-        border-radius: 6px;
-        font-weight: 500;
-        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
-    .alert-danger {
-        background-color: #FEF2F2;
-        border: 1px solid #FECACA;
-        color: #991B1B;
-        padding: 1.25rem;
-        border-radius: 6px;
-        font-weight: 500;
-        text-align: center;
+    .danger-card {
+        background: linear-gradient(to right, #fef2f2, #fee2e2);
+        border-left: 5px solid #ef4444;
+        padding: 1.5rem;
+        border-radius: 12px;
+        color: #991b1b;
+        font-size: 1.1rem;
+        font-weight: 600;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. Clinical & Sharp Header
+# 3. Clean Header inside the Card
 st.markdown("""
-<div class="premium-header">
-    <h1>StentGuard</h1>
-    <p>Clinical Intelligence & Cardiac Risk Analytics.</p>
-</div>
+<div class="main-header">StentGuard AI</div>
+<div class="sub-header">Advanced Predictive Analytics & Cardiac Monitoring</div>
 """, unsafe_allow_html=True)
 
-# 4. Secure Model Loading
+# 4. Model Loading
 @st.cache_resource
 def load_model():
     with open('stent_predictive_model.pkl', 'rb') as file:
         return pickle.load(file)
 model = load_model()
 
-# 5. Clean Grid Layout (2 Columns for elegance)
-col1, padding, col2 = st.columns([1, 0.1, 1])
+# 5. Form Layout - 2 Columns
+col1, padding, col2 = st.columns([1, 0.05, 1])
 
 with col1:
     age = st.number_input("Patient Age", 20, 100, 50)
@@ -132,22 +142,25 @@ with col1:
     chest_pain = st.selectbox("Chest Pain Category", ["Atypical Angina", "Non-Anginal", "Asymptomatic", "Typical Angina"])
     resting_bp = st.number_input("Resting BP (mmHg)", 50, 200, 120)
     cholesterol = st.number_input("Serum Cholesterol", 100, 600, 200)
-    fasting_bs = st.selectbox("Fasting Blood Sugar > 120", ["Negative", "Positive"])
 
 with col2:
+    fasting_bs = st.selectbox("Fasting Blood Sugar > 120", ["Negative", "Positive"])
     resting_ecg = st.selectbox("Resting ECG Result", ["Normal", "ST-T Abnormality", "LV Hypertrophy"])
     max_hr = st.number_input("Maximum Heart Rate", 60, 220, 140)
     exercise_angina = st.selectbox("Exercise Induced Angina", ["Negative", "Positive"])
-    oldpeak = st.number_input("ST Depression (Oldpeak)", -3.0, 7.0, 0.0, 0.1)
-    st_slope = st.selectbox("ST Segment Slope", ["Upsloping", "Flat", "Downsloping"])
     
-    # Run Button inside the right column for a tighter layout
-    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-    submit_button = st.button("RUN ANALYSIS")
+    col2a, col2b = st.columns(2)
+    with col2a:
+        oldpeak = st.number_input("ST Depression", -3.0, 7.0, 0.0, 0.1)
+    with col2b:
+        st_slope = st.selectbox("ST Slope", ["Upsloping", "Flat", "Downsloping"])
 
-# 6. Silent Processing
+# 6. Execute Button & Spacing
+st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+submit_button = st.button("RUN PREDICTIVE ANALYSIS")
+
+# 7. Processing Logic
 if submit_button:
-    # Logic Mapping
     sex_m = 1 if sex == "Male" else 0
     cpt_ata = 1 if chest_pain == "Atypical Angina" else 0
     cpt_nap = 1 if chest_pain == "Non-Anginal" else 0
@@ -166,6 +179,6 @@ if submit_button:
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     if prediction[0] == 1:
-        st.markdown("<div class='alert-danger'><b>Attention Required:</b> Predictive models indicate an elevated probability of cardiac complications.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='danger-card'>🚨 <b>CRITICAL ALERT:</b> Predictive parameters indicate a high probability of cardiac risk. Immediate clinical review advised.</div>", unsafe_allow_html=True)
     else:
-        st.markdown("<div class='alert-safe'><b>Status Normal:</b> Patient vitals currently align with stable cardiac parameters.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='safe-card'>✅ <b>OPTIMAL PROFILE:</b> Patient vitals align with stable cardiac parameters. No immediate risk detected.</div>", unsafe_allow_html=True)
