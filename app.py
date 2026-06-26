@@ -4,85 +4,76 @@ import pickle
 # 1. Page Config
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. Tailwind "Zinc" Dark Theme & Typography (Vercel/Linear Vibe)
+# 2. Tailwind "Zinc" Dark Theme & Typography (Dark Inputs Fixed)
 st.markdown("""
 <style>
-    /* Import Premium Font (Inter) */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-    /* Tailwind Zinc-950 Background */
     .stApp {
         background-color: #09090b !important;
         font-family: 'Inter', sans-serif !important;
         color: #fafafa !important;
     }
     
-    /* Hide Default Clutter */
-    #MainMenu {visibility: hidden;}
-    header {visibility: hidden;}
-    footer {visibility: hidden;}
+    #MainMenu, header, footer {visibility: hidden;}
     
-    /* Main Layout Wrapper */
     .block-container {
         padding-top: 4rem !important;
         padding-bottom: 4rem !important;
         max-width: 900px !important;
     }
 
-    /* PERFECTLY CENTERED & TYPOGRAPHY-FOCUSED HEADERS */
     .header-container {
         text-align: center;
         margin-bottom: 4rem;
         padding-bottom: 2rem;
-        border-bottom: 1px solid #27272a; /* Tailwind zinc-800 */
+        border-bottom: 1px solid #27272a; 
     }
     .main-title {
         color: #fafafa;
         font-weight: 800;
         font-size: 3.5rem;
-        letter-spacing: -0.04em; /* Tight tracking like Apple/Tailwind */
+        letter-spacing: -0.04em;
         line-height: 1.1;
         margin-bottom: 0.5rem;
     }
     .sub-title {
-        color: #a1a1aa; /* Tailwind zinc-400 */
+        color: #a1a1aa; 
         font-size: 1.15rem;
         font-weight: 400;
         letter-spacing: -0.01em;
     }
 
-    /* Tailwind Styled Inputs (Zinc-900 bg, Zinc-800 border) */
-    .stNumberInput > div > div > input, 
-    .stSelectbox > div > div > select {
-        background-color: #18181b !important; /* zinc-900 */
-        border: 1px solid #27272a !important; /* zinc-800 */
+    /* BULLETPROOF EXACT DARK INPUT BOXES */
+    div[data-baseweb="base-input"] > div, 
+    div[data-baseweb="select"] > div {
+        background-color: #18181b !important; /* Deep Dark Zinc */
+        border: 1px solid #27272a !important; /* Subtle border */
         border-radius: 8px !important;
-        color: #e4e4e7 !important; /* zinc-200 */
-        font-weight: 500;
-        font-size: 0.95rem;
-        padding: 0.6rem 0.75rem;
-        transition: all 0.15s ease-in-out;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+    input {
+        color: #fafafa !important; /* White text inside input */
+        background-color: transparent !important;
+    }
+    div[data-baseweb="select"] span {
+        color: #fafafa !important; /* White text inside dropdown */
     }
     
-    /* Tailwind Ring Effect on Focus */
-    .stNumberInput > div > div > input:focus, 
-    .stSelectbox > div > div > select:focus {
-        border-color: #52525b !important; /* zinc-600 */
+    div[data-baseweb="base-input"] > div:focus-within, 
+    div[data-baseweb="select"] > div:focus-within {
+        border-color: #52525b !important; 
         box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
     }
     
-    /* Tailwind Micro-Typography for Labels (text-xs, uppercase, tracking-widest, text-zinc-500) */
     label {
         font-size: 0.7rem !important;
         text-transform: uppercase !important;
         letter-spacing: 0.05em !important;
         font-weight: 600 !important;
-        color: #71717a !important; /* zinc-500 */
+        color: #71717a !important; 
         margin-bottom: 0.3rem !important;
     }
 
-    /* High-Contrast Brutalist Button (Pure White on Dark) */
     div.stButton > button {
         background-color: #fafafa;
         color: #09090b;
@@ -93,37 +84,30 @@ st.markdown("""
         font-weight: 600;
         width: 100%;
         margin-top: 1.5rem;
-        transition: all 0.2s ease;
         box-shadow: 0 4px 6px -1px rgba(255, 255, 255, 0.1);
     }
     div.stButton > button:hover {
         background-color: #e4e4e7;
         transform: translateY(-1px);
-        box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.15);
     }
     
-    /* Tailwind-inspired Results Cards */
     .alert-safe {
-        background-color: rgba(22, 101, 52, 0.2); /* green-800 with opacity */
-        border: 1px solid #14532d; /* green-900 */
-        color: #4ade80; /* green-400 */
+        background-color: rgba(22, 101, 52, 0.2); 
+        border: 1px solid #14532d; 
+        color: #4ade80; 
         padding: 1.5rem;
         border-radius: 8px;
         font-weight: 500;
         text-align: center;
-        letter-spacing: -0.01em;
-        backdrop-filter: blur(10px);
     }
     .alert-danger {
-        background-color: rgba(153, 27, 27, 0.2); /* red-800 with opacity */
-        border: 1px solid #7f1d1d; /* red-900 */
-        color: #f87171; /* red-400 */
+        background-color: rgba(153, 27, 27, 0.2); 
+        border: 1px solid #7f1d1d; 
+        color: #f87171; 
         padding: 1.5rem;
         border-radius: 8px;
         font-weight: 500;
         text-align: center;
-        letter-spacing: -0.01em;
-        backdrop-filter: blur(10px);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -131,7 +115,7 @@ st.markdown("""
 # 3. Clean Tailwind-Style Header
 st.markdown("""
 <div class="header-container">
-    <div class="main-title">StentGuard</div>
+    <div class="main-title">StentGuard AI</div>
     <div class="sub-title">Predictive Intelligence for Cardiac Risk Management.</div>
 </div>
 """, unsafe_allow_html=True)
@@ -143,7 +127,7 @@ def load_model():
         return pickle.load(file)
 model = load_model()
 
-# 5. Form Layout - 2 Columns with ample spacing
+# 5. Form Layout - 2 Columns
 col1, padding, col2 = st.columns([1, 0.1, 1])
 
 with col1:
