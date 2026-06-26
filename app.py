@@ -42,7 +42,7 @@ st.markdown("""
         letter-spacing: -0.01em;
     }
 
-    /* FIX: Force ALL Inputs (Number & Select) to be uniform Dark Zinc */
+    /* ALL Inputs Uniform Dark Zinc */
     div[data-baseweb="input"] > div, 
     div[data-baseweb="base-input"] > div, 
     div[data-baseweb="select"] > div {
@@ -51,14 +51,23 @@ st.markdown("""
         border-radius: 8px !important;
     }
     
-    /* FIX: Premium Platinum/Silver Text Color inside all boxes */
+    /* FIX: Make the +/- Stepper Buttons Dark to match */
+    div[data-baseweb="input"] button {
+        background-color: #27272a !important; /* Dark slate for buttons */
+        color: #e2e8f0 !important;
+    }
+    div[data-baseweb="input"] button:hover {
+        background-color: #3f3f46 !important; /* Slightly lighter on hover */
+    }
+    
+    /* Premium Platinum/Silver Text Color */
     input {
-        color: #e2e8f0 !important; /* Premium Platinum Color */
+        color: #e2e8f0 !important; 
         background-color: transparent !important;
         -webkit-text-fill-color: #e2e8f0 !important; 
     }
     div[data-baseweb="select"] span {
-        color: #e2e8f0 !important; /* Premium Platinum Color */
+        color: #e2e8f0 !important; 
     }
     
     div[data-baseweb="input"] > div:focus-within,
@@ -83,10 +92,9 @@ st.markdown("""
         border: 1px solid #fafafa;
         border-radius: 8px;
         padding: 0.75rem 2rem;
-        font-size: 1rem;
-        font-weight: 600;
-        width: 100%;
-        margin-top: 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-top: 2rem;
         box-shadow: 0 4px 6px -1px rgba(255, 255, 255, 0.1);
     }
     div.stButton > button:hover {
@@ -149,8 +157,8 @@ with col2:
     with col2b:
         st_slope = st.selectbox("ST Slope", ["Upsloping", "Flat", "Downsloping"])
 
-st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-submit_button = st.button("Run Predictive Analysis")
+# FIX: Added use_container_width=True to make the button full width
+submit_button = st.button("RUN PREDICTIVE ANALYSIS", use_container_width=True)
 
 if submit_button:
     sex_m = 1 if sex == "Male" else 0
