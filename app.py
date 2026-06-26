@@ -1,8 +1,10 @@
 import streamlit as st
 import pickle
 
+# --- 1. PAGE CONFIGURATION ---
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
+# --- 2. ADVANCED CSS (TAILWIND/ZINC DARK THEME + BUG FIXES) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -42,7 +44,7 @@ st.markdown("""
         letter-spacing: -0.01em;
     }
 
-    /* ALL Inputs Uniform Dark Zinc */
+    /* INPUT BOXES & TEXT COLOR FIX */
     div[data-baseweb="input"] > div, 
     div[data-baseweb="base-input"] > div, 
     div[data-baseweb="select"] > div {
@@ -51,32 +53,47 @@ st.markdown("""
         border-radius: 8px !important;
     }
     
-    /* FIX: Make the +/- Stepper Buttons Dark to match */
-    div[data-baseweb="input"] button {
-        background-color: #27272a !important; /* Dark slate for buttons */
-        color: #e2e8f0 !important;
-    }
-    div[data-baseweb="input"] button:hover {
-        background-color: #3f3f46 !important; /* Slightly lighter on hover */
-    }
-    
-    /* Premium Platinum/Silver Text Color */
-    input {
+    /* Force Platinum text everywhere */
+    input, div[data-baseweb="select"] div {
         color: #e2e8f0 !important; 
-        background-color: transparent !important;
         -webkit-text-fill-color: #e2e8f0 !important; 
     }
-    div[data-baseweb="select"] span {
-        color: #e2e8f0 !important; 
-    }
     
+    /* Focus effects */
     div[data-baseweb="input"] > div:focus-within,
     div[data-baseweb="base-input"] > div:focus-within, 
     div[data-baseweb="select"] > div:focus-within {
         border-color: #52525b !important; 
         box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
     }
+
+    /* THE STUBBORN +/- BUTTONS FIX */
+    button[title="Step up"], button[title="Step down"], 
+    [data-testid="stNumberInputStepUp"], [data-testid="stNumberInputStepDown"] {
+        background-color: #27272a !important; 
+        color: #fafafa !important;
+    }
+    button[title="Step up"]:hover, button[title="Step down"]:hover,
+    [data-testid="stNumberInputStepUp"]:hover, [data-testid="stNumberInputStepDown"]:hover {
+        background-color: #3f3f46 !important;
+    }
     
+    /* DROPDOWN POP-UP MENU FIX (The White Box Bug) */
+    div[role="listbox"], ul[data-baseweb="menu"] {
+        background-color: #18181b !important;
+        border: 1px solid #27272a !important;
+        border-radius: 8px !important;
+    }
+    li[role="option"] {
+        background-color: #18181b !important;
+        color: #e2e8f0 !important;
+    }
+    li[role="option"]:hover, li[aria-selected="true"] {
+        background-color: #27272a !important;
+        color: #ffffff !important;
+    }
+    
+    /* Labels */
     label {
         font-size: 0.7rem !important;
         text-transform: uppercase !important;
@@ -86,6 +103,7 @@ st.markdown("""
         margin-bottom: 0.3rem !important;
     }
 
+    /* Full-Width Submit Button */
     div.stButton > button {
         background-color: #fafafa;
         color: #09090b;
@@ -102,6 +120,7 @@ st.markdown("""
         transform: translateY(-1px);
     }
     
+    /* Result Alerts */
     .alert-safe {
         background-color: rgba(22, 101, 52, 0.2); 
         border: 1px solid #14532d; 
@@ -123,6 +142,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# --- 3. HEADER UI ---
 st.markdown("""
 <div class="header-container">
     <div class="main-title">StentGuard AI</div>
@@ -130,12 +150,14 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# --- 4. SECURE MODEL LOADING ---
 @st.cache_resource
 def load_model():
     with open('stent_predictive_model.pkl', 'rb') as file:
         return pickle.load(file)
 model = load_model()
 
+# --- 5. CLEAN GRID LAYOUT (2 COLUMNS) ---
 col1, padding, col2 = st.columns([1, 0.1, 1])
 
 with col1:
@@ -157,10 +179,12 @@ with col2:
     with col2b:
         st_slope = st.selectbox("ST Slope", ["Upsloping", "Flat", "Downsloping"])
 
-# FIX: Added use_container_width=True to make the button full width
+# --- 6. EXECUTE BUTTON ---
 submit_button = st.button("RUN PREDICTIVE ANALYSIS", use_container_width=True)
 
+# --- 7. PROCESSING LOGIC ---
 if submit_button:
+    # Feature Mapping
     sex_m = 1 if sex == "Male" else 0
     cpt_ata = 1 if chest_pain == "Atypical Angina" else 0
     cpt_nap = 1 if chest_pain == "Non-Anginal" else 0
@@ -175,8 +199,10 @@ if submit_button:
     features = [[age, resting_bp, cholesterol, bs_val, max_hr, oldpeak, 
                  sex_m, cpt_ata, cpt_nap, cpt_ta, ecg_normal, ecg_st, angina_y, slope_flat, slope_up]]
     
+    # Prediction
     prediction = model.predict(features)
     
+    # Output Rendering
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     if prediction[0] == 1:
         st.markdown("<div class='alert-danger'>Alert: Critical predictive parameters detected. Immediate clinical review advised.</div>", unsafe_allow_html=True)
