@@ -1,10 +1,8 @@
 import streamlit as st
 import pickle
 
-# 1. Page Config
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. Tailwind "Zinc" Dark Theme & Typography (Dark Inputs Fixed)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -44,21 +42,26 @@ st.markdown("""
         letter-spacing: -0.01em;
     }
 
-    /* BULLETPROOF EXACT DARK INPUT BOXES */
+    /* FIX: Force ALL Inputs (Number & Select) to be uniform Dark Zinc */
+    div[data-baseweb="input"] > div, 
     div[data-baseweb="base-input"] > div, 
     div[data-baseweb="select"] > div {
-        background-color: #18181b !important; /* Deep Dark Zinc */
-        border: 1px solid #27272a !important; /* Subtle border */
+        background-color: #18181b !important; 
+        border: 1px solid #27272a !important; 
         border-radius: 8px !important;
     }
+    
+    /* FIX: Premium Platinum/Silver Text Color inside all boxes */
     input {
-        color: #fafafa !important; /* White text inside input */
+        color: #e2e8f0 !important; /* Premium Platinum Color */
         background-color: transparent !important;
+        -webkit-text-fill-color: #e2e8f0 !important; 
     }
     div[data-baseweb="select"] span {
-        color: #fafafa !important; /* White text inside dropdown */
+        color: #e2e8f0 !important; /* Premium Platinum Color */
     }
     
+    div[data-baseweb="input"] > div:focus-within,
     div[data-baseweb="base-input"] > div:focus-within, 
     div[data-baseweb="select"] > div:focus-within {
         border-color: #52525b !important; 
@@ -112,7 +115,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 3. Clean Tailwind-Style Header
 st.markdown("""
 <div class="header-container">
     <div class="main-title">StentGuard AI</div>
@@ -120,14 +122,12 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 4. Model Loading
 @st.cache_resource
 def load_model():
     with open('stent_predictive_model.pkl', 'rb') as file:
         return pickle.load(file)
 model = load_model()
 
-# 5. Form Layout - 2 Columns
 col1, padding, col2 = st.columns([1, 0.1, 1])
 
 with col1:
@@ -149,11 +149,9 @@ with col2:
     with col2b:
         st_slope = st.selectbox("ST Slope", ["Upsloping", "Flat", "Downsloping"])
 
-# 6. Execute Button
 st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
 submit_button = st.button("Run Predictive Analysis")
 
-# 7. Processing Logic
 if submit_button:
     sex_m = 1 if sex == "Male" else 0
     cpt_ata = 1 if chest_pain == "Atypical Angina" else 0
