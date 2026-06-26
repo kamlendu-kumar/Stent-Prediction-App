@@ -4,15 +4,17 @@ import pickle
 # 1. Page Config
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. Dual-Tone & Pattern CSS (Fixed Centered Header)
+# 2. Tailwind "Zinc" Dark Theme & Typography (Vercel/Linear Vibe)
 st.markdown("""
 <style>
-    /* Dark Patterned Background */
+    /* Import Premium Font (Inter) */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    /* Tailwind Zinc-950 Background */
     .stApp {
-        background-color: #0f172a;
-        background-image: radial-gradient(#334155 1.5px, transparent 1.5px);
-        background-size: 30px 30px;
-        font-family: 'Inter', -apple-system, sans-serif;
+        background-color: #09090b !important;
+        font-family: 'Inter', sans-serif !important;
+        color: #fafafa !important;
     }
     
     /* Hide Default Clutter */
@@ -20,114 +22,118 @@ st.markdown("""
     header {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* The Floating Premium White Card */
+    /* Main Layout Wrapper */
     .block-container {
-        background-color: #ffffff;
-        border-radius: 24px;
-        padding: 3rem 4rem !important;
-        margin-top: 4rem !important;
-        margin-bottom: 4rem !important;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-        max-width: 950px !important;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+        max-width: 900px !important;
     }
 
-    /* PERFECTLY CENTERED HEADERS */
-    .main-header {
-        color: #0f172a;
-        font-weight: 900;
-        font-size: 2.8rem;
-        letter-spacing: -1px;
-        margin-bottom: 0.2rem;
-        text-align: center; /* FIXED */
+    /* PERFECTLY CENTERED & TYPOGRAPHY-FOCUSED HEADERS */
+    .header-container {
+        text-align: center;
+        margin-bottom: 4rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #27272a; /* Tailwind zinc-800 */
     }
-    .sub-header {
-        color: #64748b;
-        font-size: 1.1rem;
-        font-weight: 500;
-        margin-bottom: 2.5rem;
-        border-bottom: 2px solid #f1f5f9;
-        padding-bottom: 1.5rem;
-        text-align: center; /* FIXED */
+    .main-title {
+        color: #fafafa;
+        font-weight: 800;
+        font-size: 3.5rem;
+        letter-spacing: -0.04em; /* Tight tracking like Apple/Tailwind */
+        line-height: 1.1;
+        margin-bottom: 0.5rem;
+    }
+    .sub-title {
+        color: #a1a1aa; /* Tailwind zinc-400 */
+        font-size: 1.15rem;
+        font-weight: 400;
+        letter-spacing: -0.01em;
     }
 
-    /* Input Fields */
+    /* Tailwind Styled Inputs (Zinc-900 bg, Zinc-800 border) */
     .stNumberInput > div > div > input, 
     .stSelectbox > div > div > select {
-        background-color: #f8fafc !important;
-        border: 1.5px solid #e2e8f0 !important;
-        border-radius: 10px !important;
-        color: #0f172a !important;
+        background-color: #18181b !important; /* zinc-900 */
+        border: 1px solid #27272a !important; /* zinc-800 */
+        border-radius: 8px !important;
+        color: #e4e4e7 !important; /* zinc-200 */
         font-weight: 500;
-        padding: 0.5rem;
-        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        padding: 0.6rem 0.75rem;
+        transition: all 0.15s ease-in-out;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     }
+    
+    /* Tailwind Ring Effect on Focus */
     .stNumberInput > div > div > input:focus, 
     .stSelectbox > div > div > select:focus {
-        border-color: #4f46e5 !important;
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
+        border-color: #52525b !important; /* zinc-600 */
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
     }
     
-    /* Micro-Typography for Labels */
+    /* Tailwind Micro-Typography for Labels (text-xs, uppercase, tracking-widest, text-zinc-500) */
     label {
-        font-size: 0.75rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        font-weight: 700 !important;
-        color: #475569 !important;
-        margin-bottom: 6px !important;
+        font-size: 0.7rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        font-weight: 600 !important;
+        color: #71717a !important; /* zinc-500 */
+        margin-bottom: 0.3rem !important;
     }
 
-    /* Action Button */
+    /* High-Contrast Brutalist Button (Pure White on Dark) */
     div.stButton > button {
-        background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 0.8rem 0;
-        font-size: 1.05rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
+        background-color: #fafafa;
+        color: #09090b;
+        border: 1px solid #fafafa;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
         width: 100%;
         margin-top: 1.5rem;
-        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px -1px rgba(255, 255, 255, 0.1);
     }
     div.stButton > button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.4);
+        background-color: #e4e4e7;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.15);
     }
     
-    /* Custom Results Cards */
-    .safe-card {
-        background: linear-gradient(to right, #f0fdf4, #dcfce7);
-        border-left: 5px solid #22c55e;
+    /* Tailwind-inspired Results Cards */
+    .alert-safe {
+        background-color: rgba(22, 101, 52, 0.2); /* green-800 with opacity */
+        border: 1px solid #14532d; /* green-900 */
+        color: #4ade80; /* green-400 */
         padding: 1.5rem;
-        border-radius: 12px;
-        color: #166534;
-        font-size: 1.1rem;
-        font-weight: 600;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        font-weight: 500;
         text-align: center;
+        letter-spacing: -0.01em;
+        backdrop-filter: blur(10px);
     }
-    .danger-card {
-        background: linear-gradient(to right, #fef2f2, #fee2e2);
-        border-left: 5px solid #ef4444;
+    .alert-danger {
+        background-color: rgba(153, 27, 27, 0.2); /* red-800 with opacity */
+        border: 1px solid #7f1d1d; /* red-900 */
+        color: #f87171; /* red-400 */
         padding: 1.5rem;
-        border-radius: 12px;
-        color: #991b1b;
-        font-size: 1.1rem;
-        font-weight: 600;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        font-weight: 500;
         text-align: center;
+        letter-spacing: -0.01em;
+        backdrop-filter: blur(10px);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. Clean Header inside the Card
+# 3. Clean Tailwind-Style Header
 st.markdown("""
-<div class="main-header">StentGuard AI</div>
-<div class="sub-header">Advanced Predictive Analytics & Cardiac Monitoring</div>
+<div class="header-container">
+    <div class="main-title">StentGuard</div>
+    <div class="sub-title">Predictive Intelligence for Cardiac Risk Management.</div>
+</div>
 """, unsafe_allow_html=True)
 
 # 4. Model Loading
@@ -137,8 +143,8 @@ def load_model():
         return pickle.load(file)
 model = load_model()
 
-# 5. Form Layout - 2 Columns
-col1, padding, col2 = st.columns([1, 0.05, 1])
+# 5. Form Layout - 2 Columns with ample spacing
+col1, padding, col2 = st.columns([1, 0.1, 1])
 
 with col1:
     age = st.number_input("Patient Age", 20, 100, 50)
@@ -159,9 +165,9 @@ with col2:
     with col2b:
         st_slope = st.selectbox("ST Slope", ["Upsloping", "Flat", "Downsloping"])
 
-# 6. Execute Button & Spacing
+# 6. Execute Button
 st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-submit_button = st.button("RUN PREDICTIVE ANALYSIS")
+submit_button = st.button("Run Predictive Analysis")
 
 # 7. Processing Logic
 if submit_button:
@@ -183,6 +189,6 @@ if submit_button:
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     if prediction[0] == 1:
-        st.markdown("<div class='danger-card'>🚨 <b>CRITICAL ALERT:</b> Predictive parameters indicate a high probability of cardiac risk. Immediate clinical review advised.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='alert-danger'>Alert: Critical predictive parameters detected. Immediate clinical review advised.</div>", unsafe_allow_html=True)
     else:
-        st.markdown("<div class='safe-card'>✅ <b>OPTIMAL PROFILE:</b> Patient vitals align with stable cardiac parameters. No immediate risk detected.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='alert-safe'>Optimal: Patient vitals align with stable cardiac parameters. No immediate risk detected.</div>", unsafe_allow_html=True)
