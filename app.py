@@ -4,24 +4,29 @@ import pickle
 # --- 1. PAGE CONFIGURATION ---
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# --- 2. NEXT-GEN GLASSMORPHISM CSS ---
+# --- 2. AURORA & WATER RIPPLE CSS ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-    /* Advanced Animated Mesh Background */
-    .stApp {
-        background: linear-gradient(-45deg, #f5f7fa, #e4ebf5, #e0eafc, #cfdef3) !important;
-        background-size: 400% 400% !important;
-        animation: gradientBG 15s ease infinite !important;
-        font-family: 'Outfit', sans-serif !important;
-        color: #1e293b !important;
+    /* Light Aurora Animated Background */
+    @keyframes aurora {
+        0% { background-position: 50% 50%, 50% 50%; }
+        50% { background-position: 100% 50%, 0% 50%; }
+        100% { background-position: 50% 50%, 50% 50%; }
     }
     
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+    .stApp {
+        background-color: #F8FAFC !important;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(161, 196, 253, 0.4) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(253, 191, 183, 0.35) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(194, 233, 251, 0.4) 0px, transparent 50%),
+            radial-gradient(at 0% 100%, rgba(203, 187, 255, 0.35) 0px, transparent 50%) !important;
+        background-size: 200% 200% !important;
+        animation: aurora 15s ease-in-out infinite !important;
+        font-family: 'Outfit', sans-serif !important;
+        color: #1e293b !important;
     }
     
     #MainMenu, header, footer {visibility: hidden;}
@@ -35,21 +40,21 @@ st.markdown("""
     /* Floating Glass Header */
     .header-container {
         background: rgba(255, 255, 255, 0.4);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.7);
         border-radius: 24px;
         text-align: center;
         margin-bottom: 3.5rem;
         padding: 2.5rem 2rem;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        box-shadow: 0 8px 32px 0 rgba(161, 196, 253, 0.15);
         display: flex;
         flex-direction: column;
         align-items: center;
     }
     
     .header-icon {
-        background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+        background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.5rem;
@@ -68,19 +73,18 @@ st.markdown("""
         color: #64748b; 
         font-size: 1.2rem;
         font-weight: 400;
-        letter-spacing: 0em;
     }
 
     /* FROSTED GLASS INPUT BOXES */
     div[data-baseweb="input"] > div, 
     div[data-baseweb="base-input"] > div, 
     div[data-baseweb="select"] > div {
-        background: rgba(255, 255, 255, 0.55) !important; 
+        background: rgba(255, 255, 255, 0.6) !important; 
         backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.8) !important; 
+        border: 1px solid rgba(255, 255, 255, 0.9) !important; 
         border-radius: 16px !important;
-        box-shadow: inset 0 2px 4px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(0, 0, 0, 0.03) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: inset 0 2px 4px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+        transition: all 0.3s ease;
     }
     
     /* Text inside inputs */
@@ -88,16 +92,21 @@ st.markdown("""
         color: #1e293b !important; 
         -webkit-text-fill-color: #1e293b !important; 
         font-weight: 500 !important;
-        font-size: 1rem !important;
     }
     
-    /* Focus effects (Neon Blue Glow) */
+    /* WATER RIPPLE EFFECT ON FOCUS */
+    @keyframes ripple {
+        0% { box-shadow: 0 0 0 0 rgba(161, 196, 253, 0.6), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
+        70% { box-shadow: 0 0 0 10px rgba(161, 196, 253, 0), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
+        100% { box-shadow: 0 0 0 0 rgba(161, 196, 253, 0), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
+    }
+
     div[data-baseweb="input"] > div:focus-within,
     div[data-baseweb="base-input"] > div:focus-within, 
     div[data-baseweb="select"] > div:focus-within {
-        border-color: #3b82f6 !important; 
-        background: rgba(255, 255, 255, 0.8) !important;
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15) !important;
+        border-color: #a1c4fd !important; 
+        background: rgba(255, 255, 255, 0.9) !important;
+        animation: ripple 1.5s infinite !important;
         transform: translateY(-2px);
     }
 
@@ -113,7 +122,7 @@ st.markdown("""
     div[role="listbox"], ul[data-baseweb="menu"] {
         background: rgba(255, 255, 255, 0.9) !important;
         backdrop-filter: blur(20px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        border: 1px solid rgba(255, 255, 255, 0.9) !important;
         border-radius: 16px !important;
         box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1) !important;
     }
@@ -139,37 +148,38 @@ st.markdown("""
         margin-left: 0.2rem !important;
     }
 
-    /* GRADIENT SUBMIT BUTTON */
+    /* GRADIENT SUBMIT BUTTON WITH RIPPLE ON HOVER */
     div.stButton > button {
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
         color: #FFFFFF !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
         border-radius: 16px !important;
         padding: 1rem 2rem !important;
         font-size: 1.15rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.05em;
         margin-top: 2.5rem !important;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3), inset 0 1px 1px rgba(255,255,255,0.2) !important;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2), inset 0 1px 1px rgba(255,255,255,0.3) !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     div.stButton > button:hover {
         transform: translateY(-3px) scale(1.01) !important;
-        box-shadow: 0 20px 35px -5px rgba(15, 23, 42, 0.4), inset 0 1px 1px rgba(255,255,255,0.2) !important;
+        box-shadow: 0 20px 35px -5px rgba(15, 23, 42, 0.3), inset 0 1px 1px rgba(255,255,255,0.3) !important;
+        border-color: #a1c4fd !important;
     }
     
     /* Result Alerts (Glassmorphism versions) */
     .alert-safe {
-        background: rgba(220, 252, 231, 0.6); 
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(134, 239, 172, 0.6); 
-        border-left: 6px solid #22c55e;
-        color: #14532d; 
+        background: rgba(255, 255, 255, 0.7); 
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.9); 
+        border-left: 6px solid #10b981;
+        color: #047857; 
         padding: 1.5rem;
         border-radius: 16px;
         font-weight: 600;
         text-align: center;
-        box-shadow: 0 8px 32px rgba(34, 197, 94, 0.1);
+        box-shadow: 0 8px 32px rgba(16, 185, 129, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -177,16 +187,16 @@ st.markdown("""
         animation: slideUp 0.5s ease-out;
     }
     .alert-danger {
-        background: rgba(254, 226, 226, 0.6); 
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(252, 165, 165, 0.6);
-        border-left: 6px solid #ef4444; 
-        color: #7f1d1d; 
+        background: rgba(255, 255, 255, 0.7); 
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-left: 6px solid #f43f5e; 
+        color: #be123c; 
         padding: 1.5rem;
         border-radius: 16px;
         font-weight: 600;
         text-align: center;
-        box-shadow: 0 8px 32px rgba(239, 68, 68, 0.1);
+        box-shadow: 0 8px 32px rgba(244, 63, 94, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -205,7 +215,7 @@ st.markdown("""
 st.markdown("""
 <div class="header-container">
     <div class="header-icon">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
         </svg>
     </div>
