@@ -4,32 +4,31 @@ import pickle
 # --- 1. PAGE CONFIGURATION ---
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# --- 2. AURORA & WATER RIPPLE CSS ---
+# --- 2. DEEP AURORA & WATER RIPPLE CSS ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-    /* Light Aurora Animated Background */
-    @keyframes aurora {
-        0% { background-position: 50% 50%, 50% 50%; }
-        50% { background-position: 100% 50%, 0% 50%; }
-        100% { background-position: 50% 50%, 50% 50%; }
-    }
-    
-    .stApp {
-        background-color: #F8FAFC !important;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(161, 196, 253, 0.4) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(253, 191, 183, 0.35) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(194, 233, 251, 0.4) 0px, transparent 50%),
-            radial-gradient(at 0% 100%, rgba(203, 187, 255, 0.35) 0px, transparent 50%) !important;
-        background-size: 200% 200% !important;
-        animation: aurora 15s ease-in-out infinite !important;
+    /* 1. STRONG AURORA ANIMATION ON ROOT CONTAINERS */
+    .stApp, [data-testid="stAppViewContainer"] {
+        background: linear-gradient(-45deg, #e3eeff 0%, #e0c3fc 25%, #8ec5fc 50%, #e0c3fc 75%, #c2e9fb 100%) !important;
+        background-size: 400% 400% !important;
+        animation: auroraBG 12s ease infinite !important;
         font-family: 'Outfit', sans-serif !important;
         color: #1e293b !important;
     }
     
-    #MainMenu, header, footer {visibility: hidden;}
+    [data-testid="stHeader"] {
+        background: transparent !important;
+    }
+    
+    @keyframes auroraBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    #MainMenu, footer {visibility: hidden;}
     
     .block-container {
         padding-top: 3rem !important;
@@ -37,76 +36,75 @@ st.markdown("""
         max-width: 950px !important;
     }
 
-    /* Floating Glass Header */
+    /* 2. FLOATING GLASS HEADER */
     .header-container {
-        background: rgba(255, 255, 255, 0.4);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.45) !important;
+        backdrop-filter: blur(25px) !important;
+        -webkit-backdrop-filter: blur(25px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        border-radius: 24px !important;
         text-align: center;
         margin-bottom: 3.5rem;
         padding: 2.5rem 2rem;
-        box-shadow: 0 8px 32px 0 rgba(161, 196, 253, 0.15);
+        box-shadow: 0 10px 40px 0 rgba(142, 197, 252, 0.3) !important;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
     
     .header-icon {
-        background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.5rem;
     }
 
     .main-title {
-        color: #0f172a;
-        font-weight: 800;
-        font-size: 3.5rem;
-        letter-spacing: -0.04em;
-        line-height: 1.1;
-        margin-bottom: 0.5rem;
+        color: #0f172a !important;
+        font-weight: 800 !important;
+        font-size: 3.5rem !important;
+        letter-spacing: -0.04em !important;
+        line-height: 1.1 !important;
+        margin-bottom: 0.5rem !important;
     }
     
     .sub-title {
-        color: #64748b; 
-        font-size: 1.2rem;
-        font-weight: 400;
+        color: #475569 !important; 
+        font-size: 1.2rem !important;
+        font-weight: 500 !important;
     }
 
-    /* FROSTED GLASS INPUT BOXES */
+    /* 3. FROSTED GLASS INPUT BOXES */
     div[data-baseweb="input"] > div, 
     div[data-baseweb="base-input"] > div, 
     div[data-baseweb="select"] > div {
-        background: rgba(255, 255, 255, 0.6) !important; 
-        backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.9) !important; 
+        background: rgba(255, 255, 255, 0.7) !important; 
+        backdrop-filter: blur(15px) !important;
+        border: 2px solid rgba(255, 255, 255, 0.9) !important; 
         border-radius: 16px !important;
-        box-shadow: inset 0 2px 4px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(0, 0, 0, 0.02) !important;
-        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 4px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+        transition: all 0.3s ease !important;
     }
     
-    /* Text inside inputs */
     input, div[data-baseweb="select"] div {
-        color: #1e293b !important; 
-        -webkit-text-fill-color: #1e293b !important; 
-        font-weight: 500 !important;
+        color: #0f172a !important; 
+        -webkit-text-fill-color: #0f172a !important; 
+        font-weight: 600 !important;
     }
     
-    /* WATER RIPPLE EFFECT ON FOCUS */
-    @keyframes ripple {
-        0% { box-shadow: 0 0 0 0 rgba(161, 196, 253, 0.6), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
-        70% { box-shadow: 0 0 0 10px rgba(161, 196, 253, 0), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
-        100% { box-shadow: 0 0 0 0 rgba(161, 196, 253, 0), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
+    /* 4. THE WATER RIPPLE PULSE EFFECT (VISIBLE ON CLICK/FOCUS) */
+    @keyframes waterRipple {
+        0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.6), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
+        70% { box-shadow: 0 0 0 15px rgba(102, 126, 234, 0), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
+        100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0), inset 0 2px 4px 0 rgba(255, 255, 255, 0.9); }
     }
 
     div[data-baseweb="input"] > div:focus-within,
     div[data-baseweb="base-input"] > div:focus-within, 
     div[data-baseweb="select"] > div:focus-within {
-        border-color: #a1c4fd !important; 
-        background: rgba(255, 255, 255, 0.9) !important;
-        animation: ripple 1.5s infinite !important;
+        border-color: #667eea !important; 
+        background: #ffffff !important;
+        animation: waterRipple 1.2s infinite ease-out !important;
         transform: translateY(-2px);
     }
 
@@ -114,99 +112,97 @@ st.markdown("""
     button[title="Step up"], button[title="Step down"], 
     [data-testid="stNumberInputStepUp"], [data-testid="stNumberInputStepDown"] {
         background-color: transparent !important; 
-        color: #64748b !important;
-        border-left: 1px solid rgba(255, 255, 255, 0.5) !important;
+        color: #475569 !important;
+        border-left: 1px solid rgba(0, 0, 0, 0.1) !important;
     }
     
     /* DROPDOWN POP-UP MENU */
     div[role="listbox"], ul[data-baseweb="menu"] {
-        background: rgba(255, 255, 255, 0.9) !important;
+        background: rgba(255, 255, 255, 0.95) !important;
         backdrop-filter: blur(20px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border: 2px solid #8ec5fc !important;
         border-radius: 16px !important;
-        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 20px 40px -10px rgba(102, 126, 234, 0.3) !important;
     }
     li[role="option"] {
-        color: #1e293b !important;
+        color: #0f172a !important;
         font-weight: 500;
-        padding: 10px 15px !important;
+        padding: 12px 15px !important;
     }
     li[role="option"]:hover, li[aria-selected="true"] {
-        background-color: #f1f5f9 !important;
-        color: #3b82f6 !important;
+        background: linear-gradient(135deg, #e3eeff 0%, #c2e9fb 100%) !important;
+        color: #0f172a !important;
         border-radius: 8px;
+        font-weight: 700 !important;
     }
     
     /* Floating Labels */
     label {
-        font-size: 0.75rem !important;
+        font-size: 0.8rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.1em !important;
-        font-weight: 700 !important;
-        color: #475569 !important; 
+        letter-spacing: 0.12em !important;
+        font-weight: 800 !important;
+        color: #334155 !important; 
         margin-bottom: 0.6rem !important;
         margin-left: 0.2rem !important;
     }
 
-    /* GRADIENT SUBMIT BUTTON WITH RIPPLE ON HOVER */
+    /* 5. GRADIENT SUBMIT BUTTON WITH RIPPLE */
     div.stButton > button {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
         color: #FFFFFF !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
+        border: none !important;
         border-radius: 16px !important;
         padding: 1rem 2rem !important;
         font-size: 1.15rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.05em;
         margin-top: 2.5rem !important;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2), inset 0 1px 1px rgba(255,255,255,0.3) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4) !important;
+        transition: all 0.3s ease !important;
     }
     div.stButton > button:hover {
-        transform: translateY(-3px) scale(1.01) !important;
-        box-shadow: 0 20px 35px -5px rgba(15, 23, 42, 0.3), inset 0 1px 1px rgba(255,255,255,0.3) !important;
-        border-color: #a1c4fd !important;
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: 0 20px 35px -5px rgba(15, 23, 42, 0.5) !important;
+    }
+    div.stButton > button:active {
+        animation: waterRipple 0.5s ease-out !important;
     }
     
-    /* Result Alerts (Glassmorphism versions) */
+    /* Result Alerts */
     .alert-safe {
-        background: rgba(255, 255, 255, 0.7); 
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.9); 
-        border-left: 6px solid #10b981;
-        color: #047857; 
+        background: rgba(255, 255, 255, 0.85); 
+        backdrop-filter: blur(20px);
+        border: 2px solid #34d399; 
+        border-left: 8px solid #10b981;
+        color: #064e3b; 
         padding: 1.5rem;
         border-radius: 16px;
-        font-weight: 600;
+        font-weight: 700;
+        font-size: 1.1rem;
         text-align: center;
-        box-shadow: 0 8px 32px rgba(16, 185, 129, 0.1);
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 12px;
-        animation: slideUp 0.5s ease-out;
     }
     .alert-danger {
-        background: rgba(255, 255, 255, 0.7); 
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        border-left: 6px solid #f43f5e; 
-        color: #be123c; 
+        background: rgba(255, 255, 255, 0.85); 
+        backdrop-filter: blur(20px);
+        border: 2px solid #fb7185;
+        border-left: 8px solid #e11d48; 
+        color: #881337; 
         padding: 1.5rem;
         border-radius: 16px;
-        font-weight: 600;
+        font-weight: 700;
+        font-size: 1.1rem;
         text-align: center;
-        box-shadow: 0 8px 32px rgba(244, 63, 94, 0.1);
+        box-shadow: 0 10px 30px rgba(225, 29, 72, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 12px;
-        animation: slideUp 0.5s ease-out;
-    }
-    
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -215,7 +211,7 @@ st.markdown("""
 st.markdown("""
 <div class="header-container">
     <div class="header-icon">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
         </svg>
     </div>
@@ -281,14 +277,14 @@ if submit_button:
     if prediction[0] == 1:
         st.markdown("""
         <div class='alert-danger'>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             <strong>Critical Alert:</strong> High-risk predictive parameters detected. Immediate clinical review advised.
         </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown("""
         <div class='alert-safe'>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             <strong>Optimal:</strong> Patient vitals align with stable cardiac parameters. No immediate risk detected.
         </div>
         """, unsafe_allow_html=True)
