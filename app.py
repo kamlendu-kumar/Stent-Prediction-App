@@ -4,16 +4,24 @@ import pickle
 # --- 1. PAGE CONFIGURATION ---
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# --- 2. ADVANCED CSS (SMART LUXURY LIGHT THEME) ---
+# --- 2. NEXT-GEN GLASSMORPHISM CSS ---
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-    /* Global Premium Background */
+    /* Advanced Animated Mesh Background */
     .stApp {
-        background-color: #FDFCF8 !important; /* Warm Ivory / Cream */
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-        color: #2D2A26 !important; /* Deep Charcoal instead of harsh black */
+        background: linear-gradient(-45deg, #f5f7fa, #e4ebf5, #e0eafc, #cfdef3) !important;
+        background-size: 400% 400% !important;
+        animation: gradientBG 15s ease infinite !important;
+        font-family: 'Outfit', sans-serif !important;
+        color: #1e293b !important;
+    }
+    
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
     
     #MainMenu, header, footer {visibility: hidden;}
@@ -24,162 +32,185 @@ st.markdown("""
         max-width: 950px !important;
     }
 
-    /* Header Styling with SVG Icon */
+    /* Floating Glass Header */
     .header-container {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 24px;
         text-align: center;
         margin-bottom: 3.5rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid #EBE4D8; 
+        padding: 2.5rem 2rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
         display: flex;
         flex-direction: column;
         align-items: center;
     }
     
     .header-icon {
-        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
     }
 
     .main-title {
-        color: #1A1A1A;
+        color: #0f172a;
         font-weight: 800;
-        font-size: 3.2rem;
-        letter-spacing: -0.03em;
+        font-size: 3.5rem;
+        letter-spacing: -0.04em;
         line-height: 1.1;
         margin-bottom: 0.5rem;
     }
     
     .sub-title {
-        color: #8C857B; 
-        font-size: 1.15rem;
-        font-weight: 500;
-        letter-spacing: -0.01em;
+        color: #64748b; 
+        font-size: 1.2rem;
+        font-weight: 400;
+        letter-spacing: 0em;
     }
 
-    /* PREMIUM INPUT BOXES */
+    /* FROSTED GLASS INPUT BOXES */
     div[data-baseweb="input"] > div, 
     div[data-baseweb="base-input"] > div, 
     div[data-baseweb="select"] > div {
-        background-color: #FFFFFF !important; 
-        border: 1px solid #EBE4D8 !important; 
-        border-radius: 12px !important; /* Apple style rounded corners */
-        box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.03) !important;
-        transition: all 0.2s ease;
+        background: rgba(255, 255, 255, 0.55) !important; 
+        backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.8) !important; 
+        border-radius: 16px !important;
+        box-shadow: inset 0 2px 4px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     /* Text inside inputs */
     input, div[data-baseweb="select"] div {
-        color: #2D2A26 !important; 
-        -webkit-text-fill-color: #2D2A26 !important; 
+        color: #1e293b !important; 
+        -webkit-text-fill-color: #1e293b !important; 
         font-weight: 500 !important;
+        font-size: 1rem !important;
     }
     
-    /* Focus effects (Soft Gold/Warm Halo) */
+    /* Focus effects (Neon Blue Glow) */
     div[data-baseweb="input"] > div:focus-within,
     div[data-baseweb="base-input"] > div:focus-within, 
     div[data-baseweb="select"] > div:focus-within {
-        border-color: #C8BCA7 !important; 
-        box-shadow: 0 0 0 3px rgba(200, 188, 167, 0.2) !important;
+        border-color: #3b82f6 !important; 
+        background: rgba(255, 255, 255, 0.8) !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15) !important;
+        transform: translateY(-2px);
     }
 
-    /* +/- BUTTONS FIX for Number Inputs */
+    /* +/- BUTTONS FIX */
     button[title="Step up"], button[title="Step down"], 
     [data-testid="stNumberInputStepUp"], [data-testid="stNumberInputStepDown"] {
-        background-color: #F7F5F0 !important; 
-        color: #2D2A26 !important;
-        border-left: 1px solid #EBE4D8 !important;
+        background-color: transparent !important; 
+        color: #64748b !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.5) !important;
     }
     
     /* DROPDOWN POP-UP MENU */
     div[role="listbox"], ul[data-baseweb="menu"] {
-        background-color: #FFFFFF !important;
-        border: 1px solid #EBE4D8 !important;
-        border-radius: 12px !important;
-        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1) !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1) !important;
     }
     li[role="option"] {
-        background-color: #FFFFFF !important;
-        color: #2D2A26 !important;
+        color: #1e293b !important;
         font-weight: 500;
+        padding: 10px 15px !important;
     }
     li[role="option"]:hover, li[aria-selected="true"] {
-        background-color: #FDFCF8 !important;
-        color: #B59A6D !important; /* Subtle Gold highlight */
+        background-color: #f1f5f9 !important;
+        color: #3b82f6 !important;
+        border-radius: 8px;
     }
     
-    /* Labels */
+    /* Floating Labels */
     label {
         font-size: 0.75rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.08em !important;
+        letter-spacing: 0.1em !important;
         font-weight: 700 !important;
-        color: #8C857B !important; 
-        margin-bottom: 0.4rem !important;
+        color: #475569 !important; 
+        margin-bottom: 0.6rem !important;
+        margin-left: 0.2rem !important;
     }
 
-    /* LUXURY FULL-WIDTH SUBMIT BUTTON */
+    /* GRADIENT SUBMIT BUTTON */
     div.stButton > button {
-        background-color: #1A1A1A !important;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
         color: #FFFFFF !important;
-        border: none !important;
-        border-radius: 14px !important;
-        padding: 0.85rem 2rem !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        border-radius: 16px !important;
+        padding: 1rem 2rem !important;
         font-size: 1.15rem !important;
         font-weight: 700 !important;
+        letter-spacing: 0.05em;
         margin-top: 2.5rem !important;
-        box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.3) !important;
-        transition: all 0.3s ease !important;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3), inset 0 1px 1px rgba(255,255,255,0.2) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     div.stButton > button:hover {
-        background-color: #333333 !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.4) !important;
+        transform: translateY(-3px) scale(1.01) !important;
+        box-shadow: 0 20px 35px -5px rgba(15, 23, 42, 0.4), inset 0 1px 1px rgba(255,255,255,0.2) !important;
     }
     
-    /* Beautiful Result Alerts */
+    /* Result Alerts (Glassmorphism versions) */
     .alert-safe {
-        background-color: #F0FDF4; 
-        border: 1px solid #BBF7D0; 
-        border-left: 6px solid #22C55E;
-        color: #166534; 
+        background: rgba(220, 252, 231, 0.6); 
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(134, 239, 172, 0.6); 
+        border-left: 6px solid #22c55e;
+        color: #14532d; 
         padding: 1.5rem;
-        border-radius: 12px;
+        border-radius: 16px;
         font-weight: 600;
         text-align: center;
-        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.05);
+        box-shadow: 0 8px 32px rgba(34, 197, 94, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 12px;
+        animation: slideUp 0.5s ease-out;
     }
     .alert-danger {
-        background-color: #FEF2F2; 
-        border: 1px solid #FECACA;
-        border-left: 6px solid #EF4444; 
-        color: #991B1B; 
+        background: rgba(254, 226, 226, 0.6); 
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(252, 165, 165, 0.6);
+        border-left: 6px solid #ef4444; 
+        color: #7f1d1d; 
         padding: 1.5rem;
-        border-radius: 12px;
+        border-radius: 16px;
         font-weight: 600;
         text-align: center;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05);
+        box-shadow: 0 8px 32px rgba(239, 68, 68, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 12px;
+        animation: slideUp 0.5s ease-out;
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. HEADER UI WITH SVG ICON ---
+# --- 3. FLOATING HEADER ---
 st.markdown("""
 <div class="header-container">
     <div class="header-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#B59A6D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
-            <path d="M3.5 12h5l1.5-3 3 7 1.5-4h4.5"></path>
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
         </svg>
     </div>
     <div class="main-title">StentGuard AI</div>
-    <div class="sub-title">Predictive Intelligence for Cardiac Risk Management.</div>
+    <div class="sub-title">Advanced Predictive Intelligence for Cardiology</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -235,19 +266,19 @@ if submit_button:
     # Prediction
     prediction = model.predict(features)
     
-    # Output Rendering with SVGs inline
-    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    # Output Rendering with Animated Glass Alerts
+    st.markdown("<div style='height: 25px;'></div>", unsafe_allow_html=True)
     if prediction[0] == 1:
         st.markdown("""
         <div class='alert-danger'>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            Alert: Critical predictive parameters detected. Immediate clinical review advised.
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <strong>Critical Alert:</strong> High-risk predictive parameters detected. Immediate clinical review advised.
         </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown("""
         <div class='alert-safe'>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            Optimal: Patient vitals align with stable cardiac parameters. No immediate risk detected.
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <strong>Optimal:</strong> Patient vitals align with stable cardiac parameters. No immediate risk detected.
         </div>
         """, unsafe_allow_html=True)
