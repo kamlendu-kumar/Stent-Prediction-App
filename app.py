@@ -4,147 +4,180 @@ import pickle
 # --- 1. PAGE CONFIGURATION ---
 st.set_page_config(page_title="StentGuard AI", layout="wide", initial_sidebar_state="collapsed")
 
-# --- 2. ADVANCED CSS (TAILWIND/ZINC DARK THEME + BUG FIXES) ---
+# --- 2. ADVANCED CSS (SMART LUXURY LIGHT THEME) ---
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+    /* Global Premium Background */
     .stApp {
-        background-color: #09090b !important;
-        font-family: 'Inter', sans-serif !important;
-        color: #fafafa !important;
+        background-color: #FDFCF8 !important; /* Warm Ivory / Cream */
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        color: #2D2A26 !important; /* Deep Charcoal instead of harsh black */
     }
     
     #MainMenu, header, footer {visibility: hidden;}
     
     .block-container {
-        padding-top: 4rem !important;
+        padding-top: 3rem !important;
         padding-bottom: 4rem !important;
-        max-width: 900px !important;
+        max-width: 950px !important;
     }
 
+    /* Header Styling with SVG Icon */
     .header-container {
         text-align: center;
-        margin-bottom: 4rem;
+        margin-bottom: 3.5rem;
         padding-bottom: 2rem;
-        border-bottom: 1px solid #27272a; 
+        border-bottom: 1px solid #EBE4D8; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
+    
+    .header-icon {
+        margin-bottom: 1rem;
+    }
+
     .main-title {
-        color: #fafafa;
+        color: #1A1A1A;
         font-weight: 800;
-        font-size: 3.5rem;
-        letter-spacing: -0.04em;
+        font-size: 3.2rem;
+        letter-spacing: -0.03em;
         line-height: 1.1;
         margin-bottom: 0.5rem;
     }
+    
     .sub-title {
-        color: #a1a1aa; 
+        color: #8C857B; 
         font-size: 1.15rem;
-        font-weight: 400;
+        font-weight: 500;
         letter-spacing: -0.01em;
     }
 
-    /* INPUT BOXES & TEXT COLOR FIX */
+    /* PREMIUM INPUT BOXES */
     div[data-baseweb="input"] > div, 
     div[data-baseweb="base-input"] > div, 
     div[data-baseweb="select"] > div {
-        background-color: #18181b !important; 
-        border: 1px solid #27272a !important; 
-        border-radius: 8px !important;
+        background-color: #FFFFFF !important; 
+        border: 1px solid #EBE4D8 !important; 
+        border-radius: 12px !important; /* Apple style rounded corners */
+        box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.03) !important;
+        transition: all 0.2s ease;
     }
     
-    /* Force Platinum text everywhere */
+    /* Text inside inputs */
     input, div[data-baseweb="select"] div {
-        color: #e2e8f0 !important; 
-        -webkit-text-fill-color: #e2e8f0 !important; 
+        color: #2D2A26 !important; 
+        -webkit-text-fill-color: #2D2A26 !important; 
+        font-weight: 500 !important;
     }
     
-    /* Focus effects */
+    /* Focus effects (Soft Gold/Warm Halo) */
     div[data-baseweb="input"] > div:focus-within,
     div[data-baseweb="base-input"] > div:focus-within, 
     div[data-baseweb="select"] > div:focus-within {
-        border-color: #52525b !important; 
-        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+        border-color: #C8BCA7 !important; 
+        box-shadow: 0 0 0 3px rgba(200, 188, 167, 0.2) !important;
     }
 
-    /* THE STUBBORN +/- BUTTONS FIX */
+    /* +/- BUTTONS FIX for Number Inputs */
     button[title="Step up"], button[title="Step down"], 
     [data-testid="stNumberInputStepUp"], [data-testid="stNumberInputStepDown"] {
-        background-color: #27272a !important; 
-        color: #fafafa !important;
-    }
-    button[title="Step up"]:hover, button[title="Step down"]:hover,
-    [data-testid="stNumberInputStepUp"]:hover, [data-testid="stNumberInputStepDown"]:hover {
-        background-color: #3f3f46 !important;
+        background-color: #F7F5F0 !important; 
+        color: #2D2A26 !important;
+        border-left: 1px solid #EBE4D8 !important;
     }
     
-    /* DROPDOWN POP-UP MENU FIX (The White Box Bug) */
+    /* DROPDOWN POP-UP MENU */
     div[role="listbox"], ul[data-baseweb="menu"] {
-        background-color: #18181b !important;
-        border: 1px solid #27272a !important;
-        border-radius: 8px !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid #EBE4D8 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1) !important;
     }
     li[role="option"] {
-        background-color: #18181b !important;
-        color: #e2e8f0 !important;
+        background-color: #FFFFFF !important;
+        color: #2D2A26 !important;
+        font-weight: 500;
     }
     li[role="option"]:hover, li[aria-selected="true"] {
-        background-color: #27272a !important;
-        color: #ffffff !important;
+        background-color: #FDFCF8 !important;
+        color: #B59A6D !important; /* Subtle Gold highlight */
     }
     
     /* Labels */
     label {
-        font-size: 0.7rem !important;
+        font-size: 0.75rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.05em !important;
-        font-weight: 600 !important;
-        color: #71717a !important; 
-        margin-bottom: 0.3rem !important;
+        letter-spacing: 0.08em !important;
+        font-weight: 700 !important;
+        color: #8C857B !important; 
+        margin-bottom: 0.4rem !important;
     }
 
-    /* Full-Width Submit Button */
+    /* LUXURY FULL-WIDTH SUBMIT BUTTON */
     div.stButton > button {
-        background-color: #fafafa;
-        color: #09090b;
-        border: 1px solid #fafafa;
-        border-radius: 8px;
-        padding: 0.75rem 2rem;
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-top: 2rem;
-        box-shadow: 0 4px 6px -1px rgba(255, 255, 255, 0.1);
+        background-color: #1A1A1A !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 14px !important;
+        padding: 0.85rem 2rem !important;
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
+        margin-top: 2.5rem !important;
+        box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.3) !important;
+        transition: all 0.3s ease !important;
     }
     div.stButton > button:hover {
-        background-color: #e4e4e7;
-        transform: translateY(-1px);
+        background-color: #333333 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.4) !important;
     }
     
-    /* Result Alerts */
+    /* Beautiful Result Alerts */
     .alert-safe {
-        background-color: rgba(22, 101, 52, 0.2); 
-        border: 1px solid #14532d; 
-        color: #4ade80; 
+        background-color: #F0FDF4; 
+        border: 1px solid #BBF7D0; 
+        border-left: 6px solid #22C55E;
+        color: #166534; 
         padding: 1.5rem;
-        border-radius: 8px;
-        font-weight: 500;
+        border-radius: 12px;
+        font-weight: 600;
         text-align: center;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
     }
     .alert-danger {
-        background-color: rgba(153, 27, 27, 0.2); 
-        border: 1px solid #7f1d1d; 
-        color: #f87171; 
+        background-color: #FEF2F2; 
+        border: 1px solid #FECACA;
+        border-left: 6px solid #EF4444; 
+        color: #991B1B; 
         padding: 1.5rem;
-        border-radius: 8px;
-        font-weight: 500;
+        border-radius: 12px;
+        font-weight: 600;
         text-align: center;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. HEADER UI ---
+# --- 3. HEADER UI WITH SVG ICON ---
 st.markdown("""
 <div class="header-container">
+    <div class="header-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#B59A6D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
+            <path d="M3.5 12h5l1.5-3 3 7 1.5-4h4.5"></path>
+        </svg>
+    </div>
     <div class="main-title">StentGuard AI</div>
     <div class="sub-title">Predictive Intelligence for Cardiac Risk Management.</div>
 </div>
@@ -202,9 +235,19 @@ if submit_button:
     # Prediction
     prediction = model.predict(features)
     
-    # Output Rendering
+    # Output Rendering with SVGs inline
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     if prediction[0] == 1:
-        st.markdown("<div class='alert-danger'>Alert: Critical predictive parameters detected. Immediate clinical review advised.</div>", unsafe_allow_html=True)
+        st.markdown("""
+        <div class='alert-danger'>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            Alert: Critical predictive parameters detected. Immediate clinical review advised.
+        </div>
+        """, unsafe_allow_html=True)
     else:
-        st.markdown("<div class='alert-safe'>Optimal: Patient vitals align with stable cardiac parameters. No immediate risk detected.</div>", unsafe_allow_html=True)
+        st.markdown("""
+        <div class='alert-safe'>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Optimal: Patient vitals align with stable cardiac parameters. No immediate risk detected.
+        </div>
+        """, unsafe_allow_html=True)
