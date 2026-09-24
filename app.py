@@ -5,7 +5,7 @@ import time
 # --- 1. PAGE CONFIGURATION ---
 st.set_page_config(page_title="StentGuard AI | Enterprise", page_icon="🩺", layout="wide", initial_sidebar_state="expanded")
 
-# --- 2. APPLE-STYLE HIGH-END CSS ---
+# --- 2. APPLE-STYLE HIGH-END CSS (LIGHT THEME + CHARCOAL SIDEBAR) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -142,15 +142,32 @@ st.markdown("""
         background: #0066D6 !important;
     }
     
-    /* Custom Sidebar Styling */
+    /* Custom Sidebar Styling - Deep Charcoal */
     [data-testid="stSidebar"] {
-        background-color: #FFFFFF !important;
-        border-right: 1px solid #E5E5EA !important;
+        background-color: #1E1E24 !important;
+        border-right: 1px solid #2D2D34 !important;
+    }
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3, 
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] strong,
+    [data-testid="stSidebar"] span {
+        color: #F5F5F7 !important;
+    }
+    [data-testid="stSidebar"] hr {
+        border-color: #3A3A42 !important;
+    }
+    [data-testid="stSidebar"] .stAlert {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    [data-testid="stSidebar"] .stAlert p {
+        color: #A0A0AB !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. PROFESSIONAL SIDEBAR ---
+# --- 3. PROFESSIONAL CHARCOAL SIDEBAR ---
 with st.sidebar:
     st.markdown("## 🏥 StentGuard System")
     st.markdown("**Developer:** Kamlendu Kumar")
@@ -223,7 +240,7 @@ submit_button = st.button("RUN PREDICTIVE ANALYSIS")
 
 # --- 8. LOGIC, ANIMATION & RESULT PROCESSING ---
 if submit_button:
-    # 🌟 "GARDA" FEATURE: Fake Loading Animation for Premium Feel
+    # Fake Loading Animation for Premium Feel
     progress_bar = st.progress(0)
     status_text = st.empty()
     
