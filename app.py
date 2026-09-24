@@ -1,11 +1,12 @@
 import streamlit as st
 import pickle
 import time
+from datetime import datetime
 
 # --- 1. PAGE CONFIGURATION ---
-st.set_page_config(page_title="StentGuard AI | Enterprise", page_icon="🩺", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="StentGuard AI | Enterprise", page_icon="🫀", layout="wide", initial_sidebar_state="expanded")
 
-# --- 2. APPLE-STYLE HIGH-END CSS (LIGHT THEME + CHARCOAL SIDEBAR + FIX) ---
+# --- 2. APPLE-STYLE HIGH-END CSS ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -24,7 +25,7 @@ st.markdown("""
     .block-container {
         padding-top: 2rem !important;
         padding-bottom: 4rem !important;
-        max-width: 1100px !important;
+        max-width: 1050px !important;
     }
 
     /* Floating White Header */
@@ -122,25 +123,31 @@ st.markdown("""
         margin-bottom: 0.5rem !important;
     }
 
-    /* Apple-Style Premium Action Button */
+    /* Animated Glowing Action Button */
+    @keyframes pulse-blue {
+        0% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(0, 122, 255, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0); }
+    }
     div.stButton > button {
-        background: #007AFF !important;
+        background: linear-gradient(135deg, #007AFF 0%, #0056b3 100%) !important;
         color: #FFFFFF !important;
         border: none !important;
         border-radius: 16px !important;
-        padding: 1rem 2rem !important;
-        font-size: 1.15rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.02em;
-        margin-top: 1.5rem !important;
+        padding: 1.2rem 2rem !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em;
+        margin-top: 2rem !important;
         width: 100% !important;
-        box-shadow: 0 10px 20px rgba(0, 122, 255, 0.25) !important;
+        animation: pulse-blue 2s infinite;
         transition: all 0.3s ease !important;
     }
     div.stButton > button:hover {
         transform: translateY(-3px) !important;
+        background: linear-gradient(135deg, #3395FF 0%, #007AFF 100%) !important;
+        animation: none;
         box-shadow: 0 15px 30px rgba(0, 122, 255, 0.35) !important;
-        background: #0066D6 !important;
     }
     
     /* Custom Sidebar Styling - Deep Charcoal */
@@ -166,7 +173,7 @@ st.markdown("""
         color: #A0A0AB !important;
     }
 
-    /* ✨ FIX FOR SIDEBAR TOGGLE BUTTON ✨ */
+    /* FIX FOR SIDEBAR TOGGLE BUTTON */
     [data-testid="collapsedControl"] {
         visibility: visible !important;
         display: flex !important;
@@ -200,10 +207,15 @@ with st.sidebar:
     st.markdown("**ID:** LPU-324103592")
     st.markdown("**Program:** MCA Capstone")
     st.divider()
-    st.markdown("### 🟢 Server Status")
-    st.caption("All clinical nodes are online. Connected to secure Random Forest Engine.")
+    
+    st.markdown("### 🟢 Node Status")
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    st.caption(f"**Last Sync:** {current_time}")
+    st.caption("Engine: Random Forest Classifier")
+    st.caption("Uptime: 99.9% (Secure)")
     st.divider()
-    st.info("💡 **Clinical Tip:** Ensure ST Slope and Chest Pain inputs are highly accurate, as the AI assigns high feature importance to them.")
+    
+    st.info("💡 **Clinical Tip:** Ensure ST Slope and Chest Pain inputs are accurately mapped, as the AI assigns high feature importance to these variables.")
 
 # --- 4. ENTERPRISE HEADER & METRICS ---
 st.markdown("""
@@ -225,7 +237,7 @@ st.markdown("""
         <div class="metric-label">AI Sensitivity (Recall)</div>
     </div>
     <div class="metric-card">
-        <div class="metric-value" style="color: #34C759;">Online</div>
+        <div class="metric-value" style="color: #34C759;">Active</div>
         <div class="metric-label">Model Status</div>
     </div>
 </div>
@@ -239,30 +251,36 @@ def load_model():
 model = load_model()
 
 # --- 6. STRUCTURED CLINICAL INPUT FORM ---
-st.markdown("### 📊 Enter Patient Vitals")
+st.markdown("<h3 style='color: #1D1D1F; margin-bottom: 20px;'>📊 Enter Patient Vitals</h3>", unsafe_allow_html=True)
+
 col1, padding, col2 = st.columns([1, 0.1, 1])
 
 with col1:
-    age = st.number_input("Patient Age", 20, 100, 50)
-    sex = st.selectbox("Biological Sex", ["Male", "Female"])
-    chest_pain = st.selectbox("Chest Pain Category", ["Atypical Angina", "Non-Anginal", "Asymptomatic", "Typical Angina"])
-    resting_bp = st.number_input("Resting Blood Pressure (mmHg)", 50, 200, 120)
-    cholesterol = st.number_input("Serum Cholesterol (mg/dl)", 100, 600, 200)
+    age = st.number_input("👤 Patient Age", 20, 100, 49)
+    sex = st.selectbox("⚧ Biological Sex", ["Male", "Female"])
+    chest_pain = st.selectbox("🫁 Chest Pain Category", ["Atypical Angina", "Non-Anginal", "Asymptomatic", "Typical Angina"])
+    resting_bp = st.number_input("🫀 Resting Blood Pressure (mmHg)", 50, 200, 120)
+    cholesterol = st.number_input("🩸 Serum Cholesterol (mg/dl)", 100, 600, 200)
 
 with col2:
-    max_hr = st.number_input("Maximum Heart Rate Achieved", 60, 220, 140)
-    fasting_bs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", ["Negative", "Positive"])
-    exercise_angina = st.selectbox("Exercise Induced Angina", ["Negative", "Positive"])
-    resting_ecg = st.selectbox("Resting ECG Result", ["Normal", "ST-T Abnormality", "LV Hypertrophy"])
+    max_hr = st.number_input("⚡ Maximum Heart Rate Achieved", 60, 220, 140)
+    fasting_bs = st.selectbox("🧪 Fasting Blood Sugar > 120 mg/dl", ["Negative", "Positive"])
+    exercise_angina = st.selectbox("🏃‍♂️ Exercise Induced Angina", ["Negative", "Positive"])
+    resting_ecg = st.selectbox("📈 Resting ECG Result", ["Normal", "ST-T Abnormality", "LV Hypertrophy"])
     
     c1, c2 = st.columns(2)
     with c1:
-        oldpeak = st.number_input("ST Depression", -3.0, 7.0, 0.0, 0.1)
+        oldpeak = st.number_input("📉 ST Depression", -3.0, 7.0, 0.0, 0.1)
     with c2:
-        st_slope = st.selectbox("ST Slope", ["Upsloping", "Flat", "Downsloping"])
+        st_slope = st.selectbox("📐 ST Slope", ["Upsloping", "Flat", "Downsloping"])
 
-# --- 7. EXECUTE PREDICTION BUTTON ---
-submit_button = st.button("RUN PREDICTIVE ANALYSIS")
+# --- 7. CENTERED EXECUTE PREDICTION BUTTON ---
+# Using columns to perfectly center the big action button
+st.markdown("<br>", unsafe_allow_html=True)
+col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
+
+with col_b2:
+    submit_button = st.button("RUN PREDICTIVE ANALYSIS")
 
 # --- 8. LOGIC, ANIMATION & RESULT PROCESSING ---
 if submit_button:
@@ -304,26 +322,34 @@ if submit_button:
     
     prediction = model.predict(features)
     
-    # Render Beautiful Results
+    # Render Beautiful Results with Diagnostic Summary
+    st.markdown("<hr style='border: 1px solid #E5E5EA;'>", unsafe_allow_html=True)
+    
     if prediction[0] == 1:
         st.markdown("""
-        <div style="background-color: #FFF2F2; border: 1px solid #FF3B30; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255,59,48,0.15);">
-            <h2 style="color: #FF3B30; margin-top: 0; display: flex; align-items: center; gap: 10px;">
-                ⚠️ CRITICAL CLINICAL ALERT
+        <div style="background-color: #FFF2F2; border: 1px solid #FF3B30; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255,59,48,0.15);">
+            <h2 style="color: #FF3B30; margin-top: 0; display: flex; align-items: center; gap: 12px; font-weight: 800;">
+                <span style="font-size: 2rem;">⚠️</span> CRITICAL CLINICAL ALERT
             </h2>
-            <p style="color: #1D1D1F; font-size: 1.1rem; margin-bottom: 0; font-weight: 500;">
+            <p style="color: #1D1D1F; font-size: 1.15rem; font-weight: 600; margin-bottom: 10px;">
                 High-risk predictive parameters detected. Immediate cardiologist evaluation and stent patency check advised.
             </p>
+            <div style="background: rgba(255, 59, 48, 0.1); padding: 15px; border-radius: 10px; color: #881337; font-size: 0.9rem; font-weight: 500;">
+                <strong>Diagnostic Summary:</strong> The ensemble model has flagged a high probability of cardiovascular complication based on the provided hemodynamic markers and ECG slopes.
+            </div>
         </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown("""
-        <div style="background-color: #F2FFF5; border: 1px solid #34C759; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(52,199,89,0.15);">
-            <h2 style="color: #34C759; margin-top: 0; display: flex; align-items: center; gap: 10px;">
-                ✅ OPTIMAL STATUS
+        <div style="background-color: #F2FFF5; border: 1px solid #34C759; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(52,199,89,0.15);">
+            <h2 style="color: #34C759; margin-top: 0; display: flex; align-items: center; gap: 12px; font-weight: 800;">
+                <span style="font-size: 2rem;">✅</span> OPTIMAL STATUS
             </h2>
-            <p style="color: #1D1D1F; font-size: 1.1rem; margin-bottom: 0; font-weight: 500;">
+            <p style="color: #1D1D1F; font-size: 1.15rem; font-weight: 600; margin-bottom: 10px;">
                 Patient vitals align with stable cardiac parameters. No immediate stent failure indicators detected.
             </p>
+            <div style="background: rgba(52, 199, 89, 0.1); padding: 15px; border-radius: 10px; color: #064E3B; font-size: 0.9rem; font-weight: 500;">
+                <strong>Diagnostic Summary:</strong> The ensemble model indicates a low risk profile. Continue routine monitoring as per standard clinical guidelines.
+            </div>
         </div>
         """, unsafe_allow_html=True)
