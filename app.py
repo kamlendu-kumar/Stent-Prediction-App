@@ -5,7 +5,7 @@ import time
 # --- 1. PAGE CONFIGURATION ---
 st.set_page_config(page_title="StentGuard AI | Enterprise", page_icon="🩺", layout="wide", initial_sidebar_state="expanded")
 
-# --- 2. APPLE-STYLE HIGH-END CSS (LIGHT THEME + CHARCOAL SIDEBAR + TOGGLE FIX) ---
+# --- 2. APPLE-STYLE HIGH-END CSS (LIGHT THEME + CHARCOAL SIDEBAR + FIX) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -17,8 +17,9 @@ st.markdown("""
         color: #1D1D1F !important;
     }
     
-    /* Hide Default Streamlit Elements */
-    #MainMenu, footer, header {visibility: hidden;}
+    /* Hide Default Streamlit Menu and Footer ONLY, Keep Header for Toggle Button */
+    #MainMenu, footer {visibility: hidden !important;}
+    header {background-color: transparent !important;}
     
     .block-container {
         padding-top: 2rem !important;
@@ -165,17 +166,21 @@ st.markdown("""
         color: #A0A0AB !important;
     }
 
-    /* ✨ FIX FOR INVISIBLE SIDEBAR TOGGLE BUTTON ✨ */
+    /* ✨ FIX FOR SIDEBAR TOGGLE BUTTON ✨ */
     [data-testid="collapsedControl"] {
+        visibility: visible !important;
         display: flex !important;
         background-color: #1E1E24 !important;
         border: 1px solid #2D2D34 !important;
         border-radius: 50% !important;
-        padding: 5px !important;
-        margin-top: 15px !important;
-        margin-left: 15px !important;
+        width: 45px !important;
+        height: 45px !important;
+        align-items: center !important;
+        justify-content: center !important;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+        margin: 15px !important;
         transition: all 0.3s ease !important;
+        z-index: 100000 !important;
     }
     [data-testid="collapsedControl"]:hover {
         background-color: #2D2D34 !important;
