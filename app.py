@@ -5,7 +5,7 @@ import time
 # --- 1. PAGE CONFIGURATION ---
 st.set_page_config(page_title="StentGuard AI | Enterprise", page_icon="🩺", layout="wide", initial_sidebar_state="expanded")
 
-# --- 2. APPLE-STYLE HIGH-END CSS (LIGHT THEME + CHARCOAL SIDEBAR) ---
+# --- 2. APPLE-STYLE HIGH-END CSS (LIGHT THEME + CHARCOAL SIDEBAR + TOGGLE FIX) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -163,6 +163,27 @@ st.markdown("""
     }
     [data-testid="stSidebar"] .stAlert p {
         color: #A0A0AB !important;
+    }
+
+    /* ✨ FIX FOR INVISIBLE SIDEBAR TOGGLE BUTTON ✨ */
+    [data-testid="collapsedControl"] {
+        display: flex !important;
+        background-color: #1E1E24 !important;
+        border: 1px solid #2D2D34 !important;
+        border-radius: 50% !important;
+        padding: 5px !important;
+        margin-top: 15px !important;
+        margin-left: 15px !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+        transition: all 0.3s ease !important;
+    }
+    [data-testid="collapsedControl"]:hover {
+        background-color: #2D2D34 !important;
+        transform: scale(1.05);
+    }
+    [data-testid="collapsedControl"] svg {
+        fill: #007AFF !important;
+        color: #007AFF !important;
     }
 </style>
 """, unsafe_allow_html=True)
